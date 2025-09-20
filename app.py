@@ -6,6 +6,7 @@ from ultralytics import YOLO
 import os
 import time
 import base64
+import subprocess  # untuk panggil ffmpeg
 
 # ====== PAGE CONFIG ======
 st.set_page_config(page_title="AquaFun", layout="wide")
@@ -95,14 +96,27 @@ if uploaded_video:
     # Pastikan file selesai ditulis
     time.sleep(0.5)
 
-    progress_text.text("✅ Detection complete!")
+    # ====== KOMPRES VIDEO ======
+    compressed_path = os.path.join(tempfile.gettempdir(), "detected_compressed.mp4")
+    progress_text.text("📦 Compressing video...")
 
-    # Tampilkan video
-    st.video(out_path)
+    # Kompres dengan ffmpeg (bitrate 1M, preset fast)
+    subprocess.run([
+        "ffmpeg", "-y", "-i", out_path,
+        "-vcodec", "libx264", "-b:v", "1M",
+        "-preset", "fast",
+        "-acodec", "aac", "-b:a", "128k",
+        compressed_path
+    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    # Tombol download video
-    with open(out_path, "rb") as f:
+    progress_text.text("✅ Detection complete & compressed!")
+
+    # Tampilkan video hasil kompresi
+    st.video(compressed_path)
+
+    # Tombol download video hasil kompresi
+    with open(compressed_path, "rb") as f:
         video_bytes = f.read()
     b64 = base64.b64encode(video_bytes).decode()
-    href = f'<a href="data:video/mp4;base64,{b64}" download="detected.mp4">📥 Download Hasil Deteksi</a>'
+    href = f'<a href="data:video/mp4;base64,{b64}" download="detected.mp4">📥 Download Hasil Deteksi (Compressed)</a>'
     st.markdown(href, unsafe_allow_html=True)
