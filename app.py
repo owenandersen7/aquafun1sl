@@ -50,6 +50,10 @@ if uploaded_video:
 
     # Siapkan output video
     cap = cv2.VideoCapture(tfile.name)
+    if not cap.isOpened():
+        st.error("❌ Tidak bisa membuka video. Pastikan formatnya didukung.")
+        st.stop()
+
     # Gunakan codec H.264 agar kompatibel di browser
     fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out_path = os.path.join(tempfile.gettempdir(), "detected.mp4")
@@ -62,20 +66,29 @@ if uploaded_video:
     progress_bar = st.progress(0)
 
     frame_id = 0
+    annotated_frame = None  # simpan hasil terakhir
+
     while True:
         ret, frame = cap.read()
         if not ret:
             break
 
-        # Jalankan deteksi
-        results = model(frame, imgsz=640, conf=0.5)
-        annotated_frame = results[0].plot()
-        out.write(annotated_frame)
+        # Hanya deteksi setiap 5 frame
+        if frame_id % 5 == 0:
+            results = model(frame, imgsz=320, conf=0.5)
+            annotated_frame = results[0].plot()
+
+        # Tulis frame (pakai hasil terbaru)
+        if annotated_frame is not None:
+            out.write(annotated_frame)
+        else:
+            out.write(frame)
 
         frame_id += 1
         progress_bar.progress(frame_id / total_frames)
         progress_text.text(f"Processing frame {frame_id}/{total_frames}...")
 
+    # Tutup video
     cap.release()
     out.release()
 
