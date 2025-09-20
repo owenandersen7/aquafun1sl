@@ -1,0 +1,92 @@
+/* ====== GLOBAL BACKGROUND ====== */
+.stApp {
+    background: linear-gradient(to bottom, #00334d, #006680, #0099b3);
+    background-attachment: fixed;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* ====== HEADER ====== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: rgba(0, 51, 77, 0.8);
+    border-bottom: 2px solid #66d9ff;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    background-color: rgba(0, 122, 204, 0.8);
+    padding: 6px 14px;
+    border-radius: 8px;
+    letter-spacing: 1px;
+}
+
+.nav a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: #e0f7ff;
+    font-weight: 500;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* ====== HERO SECTION ====== */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(0, 102, 128, 0.6);
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+.hero p {
+    font-size: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* ====== UPLOAD SECTION ====== */
+.upload-title {
+    margin-top: 50px;
+    text-align: center;
+    color: #00e6e6;
+    font-size: 32px;
+}
+
+.upload-subtitle {
+    text-align: center;
+    font-size: 18px;
+    color: #e0f7ff;
+    margin-bottom: 20px;
+}
+
+.upload-center {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* ====== VIDEO CONTAINER ====== */
+.video-container {
+    max-width: 800px;
+    margin: 20px auto;
+}
