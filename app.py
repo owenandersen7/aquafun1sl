@@ -101,7 +101,7 @@ if uploaded_video:
     progress_text.text("📦 Compressing video...")
 
     cmd = [
-        "ffmpeg", "-y", "-i", out_path,
+        "ffmpeg", "-y", "-i", out_path,  # gunakan path absolut hasil deteksi
         "-vcodec", "libx264", "-pix_fmt", "yuv420p",
         "-b:v", "1M",
         "-preset", "fast",
@@ -110,7 +110,7 @@ if uploaded_video:
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
 
-    # Debug log ffmpeg (bisa dihapus kalau sudah stabil)
+    # Debug log ffmpeg jika gagal
     if result.returncode != 0:
         st.error("❌ Kompresi video gagal.")
         st.text(result.stdout)
