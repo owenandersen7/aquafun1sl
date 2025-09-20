@@ -96,40 +96,40 @@ if uploaded_video:
     # Pastikan file selesai ditulis
     time.sleep(0.5)
 
-    # ====== KOMPRES VIDEO ======
-    compressed_path = os.path.join(tempfile.gettempdir(), "detected_compressed.mp4")
-    progress_text.text("📦 Compressing video...")
+    # # ====== KOMPRES VIDEO ======
+    # compressed_path = os.path.join(tempfile.gettempdir(), "detected_compressed.mp4")
+    # progress_text.text("📦 Compressing video...")
 
-    cmd = [
-        "ffmpeg", "-y", "-i", out_path,  # gunakan path absolut hasil deteksi
-        "-vcodec", "libx264", "-pix_fmt", "yuv420p",
-        "-b:v", "1M",
-        "-preset", "fast",
-        "-acodec", "aac", "-b:a", "128k",
-        compressed_path
-    ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    # cmd = [
+    #     "ffmpeg", "-y", "-i", out_path,  # gunakan path absolut hasil deteksi
+    #     "-vcodec", "libx264", "-pix_fmt", "yuv420p",
+    #     "-b:v", "1M",
+    #     "-preset", "fast",
+    #     "-acodec", "aac", "-b:a", "128k",
+    #     compressed_path
+    # ]
+    # result = subprocess.run(cmd, capture_output=True, text=True)
 
-    # Debug log ffmpeg jika gagal
-    if result.returncode != 0:
-        st.error("❌ Kompresi video gagal.")
-        st.text(result.stdout)
-        st.text(result.stderr)
-        st.stop()
+    # # Debug log ffmpeg jika gagal
+    # if result.returncode != 0:
+    #     st.error("❌ Kompresi video gagal.")
+    #     st.text(result.stdout)
+    #     st.text(result.stderr)
+    #     st.stop()
 
-    # Cek apakah file hasil kompresi valid
-    if not os.path.exists(compressed_path) or os.path.getsize(compressed_path) == 0:
-        st.error("❌ Video hasil kompresi tidak ditemukan atau kosong.")
-        st.stop()
+    # # Cek apakah file hasil kompresi valid
+    # if not os.path.exists(compressed_path) or os.path.getsize(compressed_path) == 0:
+    #     st.error("❌ Video hasil kompresi tidak ditemukan atau kosong.")
+    #     st.stop()
 
-    progress_text.text("✅ Detection complete & compressed!")
+    # progress_text.text("✅ Detection complete & compressed!")
 
     # Tampilkan video hasil kompresi
-    st.video(compressed_path)
+    st.video(out_path)
 
-    # Tombol download video hasil kompresi
-    with open(compressed_path, "rb") as f:
-        video_bytes = f.read()
-    b64 = base64.b64encode(video_bytes).decode()
-    href = f'<a href="data:video/mp4;base64,{b64}" download="detected.mp4">📥 Download Hasil Deteksi (Compressed)</a>'
-    st.markdown(href, unsafe_allow_html=True)
+    # # Tombol download video hasil kompresi
+    # with open(compressed_path, "rb") as f:
+    #     video_bytes = f.read()
+    # b64 = base64.b64encode(video_bytes).decode()
+    # href = f'<a href="data:video/mp4;base64,{b64}" download="detected.mp4">📥 Download Hasil Deteksi (Compressed)</a>'
+    # st.markdown(href, unsafe_allow_html=True)
