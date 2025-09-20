@@ -100,20 +100,26 @@ if uploaded_video:
     compressed_path = os.path.join(tempfile.gettempdir(), "detected_compressed.mp4")
     progress_text.text("📦 Compressing video...")
 
-    # Kompres dengan ffmpeg (bitrate 1M, preset fast, pix_fmt yuv420p agar aman di browser)
-    subprocess.run([
-        "ffmpeg", "-y", "-i", out_path,
-        "-vcodec", "libx264", "-pix_fmt", "yuv420p",
-        "-b:v", "1M",
-        "-preset", "fast",
-        "-acodec", "aac", "-b:a", "128k",
-        compressed_path
-    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    # Kompres dengan ffmpeg (bitrate 1M, preset fast, aman untuk browser)
+cmd = [
+    "ffmpeg", "-y", "-i", out_path,
+    "-vcodec", "libx264", "-pix_fmt", "yuv420p",
+    "-b:v", "1M",
+    "-preset", "fast",
+    "-acodec", "aac", "-b:a", "128k",
+    compressed_path
+]
+result = subprocess.run(cmd, capture_output=True, text=True)
 
-    # Cek apakah file hasil kompresi valid
-    if not os.path.exists(compressed_path) or os.path.getsize(compressed_path) == 0:
-        st.error("❌ Video hasil kompresi tidak ditemukan atau kosong.")
-        st.stop()
+# Debug: tampilkan log ffmpeg di Streamlit
+st.text(result.stdout)
+st.text(result.stderr)
+
+# Cek apakah file hasil kompresi valid
+if not os.path.exists(compressed_path) or os.path.getsize(compressed_path) == 0:
+    st.error("❌ Video hasil kompresi tidak ditemukan atau kosong.")
+    st.stop()
+
 
     progress_text.text("✅ Detection complete & compressed!")
 
